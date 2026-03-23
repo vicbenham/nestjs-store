@@ -1,0 +1,24 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: raleigh-mongo
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+
+    volumes:
+      - 'mongo-data:/data/db'
+
+  redis:
+    image: redis:7-alpine
+    container_name: raleigh-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'redis-data:/data'
+
+volumes:
+  mongo-data:
+  redis-data:
