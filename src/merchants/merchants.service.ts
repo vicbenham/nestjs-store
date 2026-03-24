@@ -11,7 +11,7 @@ export class MerchantsService {
     });
 
     if (!merchant) {
-      throw new NotFoundException('Merchant introuvable');
+      throw new NotFoundException('Cannot find Merchant');
     }
 
     return this.prisma.order.findMany({

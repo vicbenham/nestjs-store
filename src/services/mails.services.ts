@@ -22,19 +22,19 @@ export class MailService {
     const info = await this.transporter.sendMail({
       from: process.env.MAIL_FROM,
       to,
-      subject: 'Nouvelle commande reçue',
-      text: `Bonjour ${merchantName}, vous avez reçu une nouvelle commande de ${amount}€ : ${description}`,
+      subject: 'New order',
+      text: `Hello ${merchantName}, you just received an order for ${amount}€ : ${description}`,
     });
 
-    this.logger.log(`Email envoyé à ${to} — ID: ${info.messageId}`);
+    this.logger.log(`Email sent to ${to} — ID: ${info.messageId}`);
   }
 
   async sendNewMerchantNotification(name: string, email: string) {
     await this.transporter.sendMail({
       from: process.env.MAIL_FROM,
       to: process.env.MAIL_FROM,
-      subject: 'Nouveau Merchant enregistré',
-      text: `Nouveau merchant : ${name} (${email})`,
+      subject: 'New Merchant registered',
+      text: `New Merchant : ${name} (${email})`,
     });
   }
 }

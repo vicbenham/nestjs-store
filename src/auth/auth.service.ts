@@ -1,4 +1,4 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { Injectable, ConflictException, Logger } from '@nestjs/common';
 import { PrismaService } from '../services/prisma.service';
 import { RegisterDto } from './dto/register.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -12,20 +12,22 @@ export class AuthService {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
+  private logger = new Logger(AuthService.name);
+
   async register(dto: RegisterDto) {
-    console.log('--- Register called with ---', dto);
+    this.logger.log(`Register called with`, dto);
 
     const existing = await this.prisma.merchant.findUnique({
       where: { email: dto.email },
     });
-    console.log('--- Existing ---', existing);
+    this.logger.log(`Existing`, existing);
 
     if (existing) {
-      throw new ConflictException('Email already in use');
+      throw new ConflictException(`Email already in use`);
     }
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
-    console.log('--- Password hashed ---');
+    this.logger.log(`Password hashed`);
 
     const merchant = await this.prisma.merchant.create({
       data: {
@@ -34,7 +36,7 @@ export class AuthService {
         password: hashedPassword,
       },
     });
-    console.log('--- Merchant created ---', merchant);
+    this.logger.log(`Merchant created`, merchant);
 
     this.eventEmitter.emit(
       'merchant.registered',

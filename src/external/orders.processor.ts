@@ -17,7 +17,7 @@ export class OrdersProcessor extends WorkerHost {
 
   async process(job: Job): Promise<void> {
     if (job.name === 'process-order') {
-      this.logger.log(`Traitement du job ${job.id}...`);
+      this.logger.log(`Starting job with id ${job.id}...`);
 
       const order = await this.prisma.order.create({
         data: {
@@ -28,7 +28,7 @@ export class OrdersProcessor extends WorkerHost {
         },
       });
 
-      this.logger.log(`Commande ${order.id} créée`);
+      this.logger.log(`Created Order with id ${order.id}`);
 
       await this.mailService.sendNewOrderNotification(
         job.data.merchantEmail,

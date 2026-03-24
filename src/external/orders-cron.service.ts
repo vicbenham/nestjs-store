@@ -10,14 +10,14 @@ export class OrdersCronService {
 
   @Cron('2 * * * * *') // toutes les 2 minutes pour tester
   async processPendingOrders() {
-    this.logger.log('Cron lancé — vérification des commandes PENDING...');
+    this.logger.log('Cron up — checking Orders with status PENDING...');
 
     const pendingOrders = await this.prisma.order.findMany({
       where: { status: 'PENDING' },
     });
 
     if (pendingOrders.length === 0) {
-      this.logger.log('Aucune commande en attente');
+      this.logger.log('No pending Orders');
       return;
     }
 
@@ -27,7 +27,7 @@ export class OrdersCronService {
         data: { status: 'PROCESSED' },
       });
 
-      this.logger.log(`Commande ${order.id} → PROCESSED`);
+      this.logger.log(`Order ${order.id} : PROCESSED`);
     }
   }
 }

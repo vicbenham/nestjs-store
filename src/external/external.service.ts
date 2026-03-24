@@ -17,7 +17,7 @@ export class ExternalService {
     });
 
     if (!merchant) {
-      throw new NotFoundException('Merchant introuvable');
+      throw new NotFoundException('Cannot find Merchant');
     }
 
     await this.ordersQueue.add('process-order', {
@@ -28,6 +28,6 @@ export class ExternalService {
       merchantName: merchant.name,
     });
 
-    return { message: 'Commande en cours de traitement' };
+    return { message: 'Processing order' };
   }
 }
